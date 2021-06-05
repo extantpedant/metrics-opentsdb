@@ -8,3 +8,4 @@ logs/
 *.dat
 target/
 .idea/
+.bsp/

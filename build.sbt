@@ -21,30 +21,25 @@ lazy val metricsVersion = "3.1.0"
 lazy val jerseyVersion = "2.22.2"
 lazy val mockitoVersion = "1.10.17"
 lazy val slf4jVersion = "1.7.5"
-lazy val junitVersion = "4.12"
 
 lazy val MetricsOpentsdb = (project in file("."))
   .settings(
-    name := "metrics-opentsdb",
+    name := "metrics_opentsdb",
     description := "metrics reporter for OpenTSDB",
     homepage := Some(url("http://github.com/sps/metrics-opentsdb")),
     Compile / javacOptions ++= Seq("-deprecation", "-source", "8", "-target", "8"),
-    // Include only src/main/java in the compile configuration
-    Compile / unmanagedSourceDirectories := (Compile / javaSource).value :: Nil,
-    // Include only src/test/java in the test configuration
-    Test / unmanagedSourceDirectories := (Test / javaSource).value :: Nil,
     artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
       artifact.name + "-" + module.revision + "." + artifact.extension
     },
+    testOptions += Tests.Argument(TestFrameworks.JUnit, "-v"),
     libraryDependencies ++= Seq(
       "io.dropwizard.metrics" % "metrics-core" % metricsVersion,
       "org.glassfish.jersey.core" % "jersey-client" % jerseyVersion,
       "org.glassfish.jersey.media" % "jersey-media-json-jackson" % jerseyVersion,
+      "com.github.sbt" % "junit-interface" % "0.13.2" % Test,
+      "org.mockito" % "mockito-core" % mockitoVersion % Test exclude("org.hamcrest", "hamcrest-core"),
+      "org.slf4j" % "slf4j-simple" % slf4jVersion % Test
     ),
-    Test / libraryDependencies ++= Seq(
-      "org.mockito" % "mockito-core" % mockitoVersion exclude("org.hamcrest", "hamcrest-core"),
-      "org.slf4j" % "slf4j-simple" % slf4jVersion
-    )
   )
 
 /**todo: find alternatives to these maven plugins

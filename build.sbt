@@ -2,7 +2,6 @@ ThisBuild / organization := "com.github.sps"
 ThisBuild / scalaVersion := "2.13.6"
 
 ThisBuild / developers :=
-  Developer("sps", "Sean Scanlon", "sean.scanlon@gmail.com", url("http://github.com/sps")) ::
   Developer("extant", "Barry Loper", "barry@loper.cc", url("http://github.com/extantpedant")) ::
   Nil
 
@@ -14,20 +13,22 @@ ThisBuild / scmInfo := Some(
     devConnection="scm:git:git@github.com:extantpedant/metrics-opentsdb.git"
   )
 )
+ThisBuild / resolvers += Resolver.jcenterRepo
 
 lazy val sourceEncoding = "UTF-8"
 lazy val outputEncoding = "UTF-8"
 lazy val metricsVersion = "3.1.0"
 lazy val jerseyVersion = "2.22.2"
-lazy val mockitoVersion = "1.10.17"
+lazy val mockitoVersion = "2.2.29"
 lazy val slf4jVersion = "1.7.5"
+lazy val junitVersion = "5.7.2"
 
 lazy val MetricsOpentsdb = (project in file("."))
   .settings(
     name := "metrics_opentsdb",
     description := "metrics reporter for OpenTSDB",
     homepage := Some(url("http://github.com/sps/metrics-opentsdb")),
-    Compile / javacOptions ++= Seq("-deprecation", "-source", "8", "-target", "8"),
+    javacOptions ++= Seq("-deprecation", "-source", "8", "-target", "8"),
     artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
       artifact.name + "-" + module.revision + "." + artifact.extension
     },
@@ -36,10 +37,16 @@ lazy val MetricsOpentsdb = (project in file("."))
       "io.dropwizard.metrics" % "metrics-core" % metricsVersion,
       "org.glassfish.jersey.core" % "jersey-client" % jerseyVersion,
       "org.glassfish.jersey.media" % "jersey-media-json-jackson" % jerseyVersion,
-      "com.github.sbt" % "junit-interface" % "0.13.2" % Test,
+      "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
+//      "com.github.sbt" % "junit-interface" % "0.13.2" % Test,
+//      "org.junit.platform" % "junit-platform" % junitVersion % Test,
+//      "org.junit.jupiter" % "junit-jupiter" % junitVersion % Test,
+//      "org.junit.vintage" % "vintage-test-engine" % junitVersion % Test,
       "org.mockito" % "mockito-core" % mockitoVersion % Test exclude("org.hamcrest", "hamcrest-core"),
       "org.slf4j" % "slf4j-simple" % slf4jVersion % Test
     ),
+    Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.ScalaLibrary,
+    Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat
   )
 
 /**todo: find alternatives to these maven plugins

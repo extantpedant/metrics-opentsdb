@@ -92,7 +92,7 @@ public class OpenTsdbTelnetTest {
 
 		assertEquals(10, lines.length);
 		for (int i = 0; i < 10; i++) {
-			assertEquals("put counter 123 1 foo=bar" + i, lines[i]);
+			assertEquals("put counter 123 1 foo=bar" + i + "\n", lines[i]);
 		}
 	}
 

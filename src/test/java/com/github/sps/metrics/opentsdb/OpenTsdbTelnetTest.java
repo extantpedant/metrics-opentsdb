@@ -66,7 +66,7 @@ public class OpenTsdbTelnetTest {
 		openTsdb.send(o1);
 
 		String telnetString = writer.toString();
-		assertEquals("put counter 123 1 foo=bar\n", telnetString);
+		assertEquals(String.format("put counter 123 1 foo=bar%n"), telnetString);
 
 	}
 
@@ -86,7 +86,7 @@ public class OpenTsdbTelnetTest {
 
 		// verify output
 		String telnetString = writer.toString();
-		String[] lines = telnetString.split("\n");
+		String[] lines = telnetString.split("\\R");
 
 		Arrays.sort(lines); // necessary because a HashSet doesn't guarantee an iteration order
 

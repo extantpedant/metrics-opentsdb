@@ -105,7 +105,7 @@ public class OpenTsdbMetricTest {
                 .build();
 
         String telnetString = o1.toTelnetPutString();
-        assertEquals("put counter 123 1 foo=bar\n", telnetString);
+        assertEquals(String.format("put counter 123 1 foo=bar%n"), telnetString);
     }
 
     @Test
@@ -119,7 +119,7 @@ public class OpenTsdbMetricTest {
                 .build();
 
         String telnetString = o1.toTelnetPutString();
-        assertEquals("put counter--- 123 1 ---foo=bar---\n", telnetString);
+        assertEquals(String.format("put counter--- 123 1 ---foo=bar---%n"), telnetString);
     }
 
     @Test(expected = IllegalArgumentException.class)

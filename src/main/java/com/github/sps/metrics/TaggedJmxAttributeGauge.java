@@ -5,7 +5,7 @@ import java.util.Map;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import com.codahale.metrics.JmxAttributeGauge;
+import com.codahale.metrics.jvm.JmxAttributeGauge;
 
 public class TaggedJmxAttributeGauge extends JmxAttributeGauge implements TaggedMetric {
 

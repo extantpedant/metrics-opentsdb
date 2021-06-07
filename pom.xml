@@ -1,19 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>9</version>
-    </parent>
-
-    <groupId>com.github.sps.metrics</groupId>
+    <groupId>com.github.extantpedant</groupId>
     <artifactId>metrics-opentsdb</artifactId>
     <version>1.1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>metrics-opentsdb</name>
-    <url>http://github.com/sps/metrics-opentsdb</url>
+    <url>http://github.com/extantpedant/metrics-opentsdb</url>
 
     <description>
         metrics reporter for OpenTSDB
@@ -22,18 +16,18 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <metrics.version>3.1.0</metrics.version>
-        <jersey.version>2.22.2</jersey.version>
-        <mockito.version>1.10.17</mockito.version>
-        <slf4j.version>1.7.5</slf4j.version>
-        <junit.version>4.12</junit.version>
+        <metrics.version>4.2.0</metrics.version>
+        <jersey.version>2.34</jersey.version>
+        <mockito.version>3.11.0</mockito.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <junit.version>5.7.2</junit.version>
     </properties>
 
     <developers>
         <developer>
-            <name>Sean Scanlon</name>
-            <email>sean.scanlon@gmail.com</email>
-            <timezone>-8</timezone>
+            <name>Barry Loper</name>
+            <email>extantpedant@outlook.com</email>
+            <timezone>-7</timezone>
         </developer>
     </developers>
 
@@ -46,20 +40,35 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git://github.com/sps/metrics-opentsdb.git</connection>
-        <developerConnection>scm:git:git@github.com:sps/metrics-opentsdb.git</developerConnection>
-        <url>http://github.com/sps/metrics-opentsdb/</url>
+        <connection>scm:git:git://github.com/extantpedant/metrics-opentsdb.git</connection>
+        <developerConnection>scm:git:git@github.com:extantpedant/metrics-opentsdb.git</developerConnection>
+        <url>http://github.com/extantpedant/metrics-opentsdb/</url>
     </scm>
 
     <issueManagement>
         <system>github</system>
-        <url>http://github.com/sps/metrics-opentsdb/issues#issue/</url>
+        <url>http://github.com/extantpedant/metrics-opentsdb/issues#issue/</url>
     </issueManagement>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
+            <version>${metrics.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-jvm</artifactId>
             <version>${metrics.version}</version>
         </dependency>
         <dependency>
@@ -72,15 +81,23 @@
             <artifactId>jersey-media-json-jackson</artifactId>
             <version>${jersey.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
+            <artifactId>mockito-junit-jupiter</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
             <exclusions>
@@ -89,6 +106,11 @@
                     <artifactId>hamcrest-core</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -101,12 +123,20 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.8.1</version>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.7.0</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -118,7 +148,10 @@
                         <id>enforce</id>
                         <configuration>
                             <rules>
-                                 <requireUpperBoundDeps />
+                                <requireUpperBoundDeps />
+                                <requireMavenVersion>
+                                    <version>x >= 3.6.3</version>
+                                </requireMavenVersion>
                             </rules>
                         </configuration>
                         <goals>
@@ -130,7 +163,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -143,7 +176,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -159,7 +192,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.0.5</version>
                 <configuration>
                     <effort>Max</effort>
                     <threshold>Default</threshold>
@@ -176,7 +209,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.2.201409121644</version>
+                <version>0.8.7</version>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>
@@ -223,7 +256,13 @@
                     <repoToken>${COVERALLS_REPO_TOKEN}</repoToken>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
         </plugins>
+
     </build>
 
     <profiles>
